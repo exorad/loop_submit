@@ -1,0 +1,10 @@
+petitRADTRANS/input_data/
+docs/_build/
+docs/_build/html
+__pycache__
+.DS_Store
+*~
+*.so
+build/
+dist/
+petitRADTRANS.egg-info/
