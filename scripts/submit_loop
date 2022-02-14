@@ -16,4 +16,4 @@ if __name__ == '__main__':
     """
     Main script that submits the loop
     """
-    do_loop(sys.argv)
+    do_loop(sys.argv[1:])
