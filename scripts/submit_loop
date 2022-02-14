@@ -1,0 +1,19 @@
+#!/usr/bin/python3
+import sys
+from loop_submit import loop_command
+
+
+def do_loop(args):
+    """
+    Main loop
+    """
+
+    while True:
+        loop_command(args)
+
+
+if __name__ == '__main__':
+    """
+    Main script that submits the loop
+    """
+    do_loop(sys.argv)
