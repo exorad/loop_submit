@@ -1,0 +1,19 @@
+#!/usr/bin/python3
+import sys
+from loop_submit import get_latest_timestamp, change_data_file
+
+
+def update_file(args):
+    """
+    Main loop
+    """
+    timestamp, iternumber = get_latest_timestamp()
+    print(f"INFO: canceling job and updating datafile")
+    change_data_file(iternumber)
+
+
+if __name__ == '__main__':
+    """
+    Main script that submits the loop
+    """
+    update_file(sys.argv[1:])
