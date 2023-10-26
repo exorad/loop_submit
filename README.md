@@ -1,6 +1,6 @@
 # loop_submit
 
-Tool to keep expeRT running. Provides a script that will update the data file to the latest available pickup file for continuation of a simulation
+Tool to keep expeRT/MITgcm running. Provides a script that will update the data file to the latest available pickup file for continuation of a simulation
 
 ## Installation:
 ```
@@ -13,3 +13,5 @@ Note: If you use anaconda, make sure to be doing this in the environment in whic
 
 - Go to simulation folder in ssh session.
 - Type `update_last_iter` and hit enter.
+
+For an example usage inside a slurm submit file, see `exorad_submit_long2`
