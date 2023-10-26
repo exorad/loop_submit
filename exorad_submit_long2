@@ -1,0 +1,58 @@
+#!/bin/bash -l
+#SBATCH --job-name=exorad           # shows up in the output of 'squeue'
+#SBATCH --time=5-00:00:00          # specify the requested wall-time
+#SBATCH --partition=astro2_long     # specify the partition to run on
+#SBATCH --nodes=1                  # number of nodes allocated for this job
+#SBATCH --ntasks-per-node=48                # number of MPI ranks per node
+#SBATCH --exclusive
+#SBATCH --mem=40G
+#SBATCH --cpus-per-task=1           # number of OpenMP threads per MPI rank
+#SBATCH --mail-type=ALL
+#SBATCH -o exorad-%j.out
+#SBATCH -e exorad-%j.err
+
+
+# activate anaconda environment
+conda activate exorad
+
+# current work directory for this simulation
+cd $SLURM_SUBMIT_DIR
+echo "$SLURM_SUBMIT_DIR"
+# load the required modules
+module purge
+module load astro inteloneapi/compiler inteloneapi/mpi
+
+continue=""
+while getopts 'uc' OPTION; do
+  case "$OPTION" in
+    u)
+      update_last_iter
+      ;;
+    c)
+      continue='1'
+      ;;
+    ?)
+      echo "script usage: $(basename \$0) [-u][-c]" >&2
+      exit 1
+      ;;
+  esac
+done
+shift "$(($OPTIND -1))"
+
+if [ -n "$continue" ]
+then
+        telegram-send "$SLURM_SUBMIT_DIR: submitting followup"
+        sbatch --dependency=afterok:$SLURM_JOB_ID exorad_submit_long2 -u -c
+fi
+
+telegram-send "$SLURM_SUBMIT_DIR ready to run"
+telegram_simulation_bot &
+
+cd ./run
+ln -s ../input/* .
+cp ../build/mitgcmuv .
+# run it
+echo "Ready to run"
+echo "$(date)"
+mpirun -n 48 ./mitgcmuv
+telegram-send "$SLURM_SUBMIT_DIR ended"
